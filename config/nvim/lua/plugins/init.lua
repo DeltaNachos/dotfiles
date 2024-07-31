@@ -243,15 +243,6 @@ local default_plugins = {
     end,
   },
 
-  -- copilot
-  {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
-    config = function()
-      require("copilot").setup({})
-    end,
-  },
 }
 
 local config = require("core.utils").load_config()

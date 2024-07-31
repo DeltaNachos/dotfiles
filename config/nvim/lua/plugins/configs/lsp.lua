@@ -17,7 +17,7 @@ end)
 
 -- to learn how to use mason.nvim with lsp-zero
 -- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
-require('mason').setup({})
+--[[require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {
@@ -44,9 +44,9 @@ cmp.setup({
 	mapping = cmp.mapping.preset.insert({
     -- Move between items
     ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-		['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+	['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
     -- Confirm item
     ['<C-tab>'] = cmp.mapping.confirm({ select = true }),
-		--['<C-Space>'] = cmp.mapping.complete(),
+	--['<C-Space>'] = cmp.mapping.complete(),
 	}),
-})
+})]]--
