@@ -465,4 +465,10 @@ M.gitsigns = {
   },
 }
 
+M.centerpad = {
+    n = {
+        ["<leader>cp"] = { "<cmd> Centerpad <CR>", "Toggle Centerpad" },
+    },
+}
+
 return M
