@@ -6,7 +6,7 @@ local default_plugins = {
 
   {
     "NvChad/base46",
-    branch = "v2.0",
+    lazy = true,
     build = function()
       require("base46").load_all_highlights()
     end,
@@ -14,8 +14,9 @@ local default_plugins = {
 
   {
     "NvChad/ui",
-    branch = "v2.0",
-    lazy = false,
+    config = function()
+        require "nvchad"
+    end
   },
 
   {
@@ -65,21 +66,21 @@ local default_plugins = {
       dofile(vim.g.base46_cache .. "blankline")
       require("indent_blankline").setup(opts)
     end,
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    opts = {
+        scope = { enabled = true },
+    },
   },
 
   {
     "nvim-treesitter/nvim-treesitter",
-    event = { "BufReadPost", "BufNewFile" },
-    tag = "v0.9.2",
-    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+    lazy = false,
     build = ":TSUpdate",
-    opts = function()
-      return require "plugins.configs.treesitter"
-    end,
-    config = function(_, opts)
-      dofile(vim.g.base46_cache .. "syntax")
-      require("nvim-treesitter.configs").setup(opts)
-    end,
+  },
+
+  {
+        "smithbm2316/centerpad.nvim",
+        cmd = "Centerpad",
   },
 
   -- git stuff
@@ -97,7 +98,7 @@ local default_plugins = {
 
   -- lsp stuff
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
     opts = function()
       return require "plugins.configs.mason"
@@ -119,7 +120,7 @@ local default_plugins = {
 
   {
     "neovim/nvim-lspconfig",
-    event = "User FilePost",
+    event = "BufReadPre",
     config = function()
       require "plugins.configs.lspconfig"
     end,
@@ -208,25 +209,15 @@ local default_plugins = {
   },
 
   {
-    "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    cmd = "Telescope",
-    init = function()
-      require("core.utils").load_mappings "telescope"
-    end,
-    opts = function()
-      return require "plugins.configs.telescope"
-    end,
-    config = function(_, opts)
-      dofile(vim.g.base46_cache .. "telescope")
-      local telescope = require "telescope"
-      telescope.setup(opts)
-
-      -- load extensions
-      for _, ext in ipairs(opts.extensions_list) do
-        telescope.load_extension(ext)
-      end
-    end,
+    "nvim-telescope/telescope.nvim", version = '*',
+    dependencies = {
+        'nvim-lua/plenary.nvim',
+        { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+    },
+    lazy = false,
+    config = function()
+        require("plugins.configs.telescope")
+    end
   },
 
   -- Only load whichkey after all the gui
@@ -246,9 +237,8 @@ local default_plugins = {
 }
 
 local config = require("core.utils").load_config()
-
-if #config.plugins > 0 then
-  table.insert(default_plugins, { import = config.plugins })
-end
-
 require("lazy").setup(default_plugins, config.lazy_nvim)
+
+return default_plugins
+
+
