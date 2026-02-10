@@ -10,7 +10,7 @@ M.on_attach = function(client, bufnr)
   utils.load_mappings("lspconfig", { buffer = bufnr })
 
   if client.server_capabilities.signatureHelpProvider then
-    require("nvchad.signature").setup(client)
+    --require("nvchad.lsp").setup(client)
   end
 
   if not utils.load_config().ui.lsp_semantic_tokens and client.supports_method "textDocument/semanticTokens" then
@@ -38,27 +38,35 @@ M.capabilities.textDocument.completion.completionItem = {
   },
 }
 
-require("lspconfig").lua_ls.setup {
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
+vim.lsp.config('lua_ls', {
+    -- Core properties
+    cmd = { "lua-language-server" },
+    filetypes = { "lua" },
+    root_markers = { ".git", "init.lua", "init.vim" },
 
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { "vim" },
-      },
-      workspace = {
-        library = {
-          [vim.fn.expand "$VIMRUNTIME/lua"] = true,
-          [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
-          [vim.fn.stdpath "data" .. "/lazy/ui/nvchad_types"] = true,
-          [vim.fn.stdpath "data" .. "/lazy/lazy.nvim/lua/lazy"] = true,
+    on_attach = M.on_attach,
+    capabilities = M.capabilities,
+
+    settings = {
+        Lua = {
+            diagnostics = {
+            globals = { "vim" },
+            },
+            workspace = {
+                library = {
+                    [vim.fn.expand "$VIMRUNTIME/lua"] = true,
+                    [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
+                    [vim.fn.stdpath "data" .. "/lazy/ui/nvchad_types"] = true,
+                    [vim.fn.stdpath "data" .. "/lazy/lazy.nvim/lua/lazy"] = true,
+                },
+                maxPreload = 100000,
+                preloadFileSize = 10000,
+            },
         },
-        maxPreload = 100000,
-        preloadFileSize = 10000,
-      },
     },
-  },
-}
+
+})
+
+vim.lsp.enable('lua_ls')
 
 return M

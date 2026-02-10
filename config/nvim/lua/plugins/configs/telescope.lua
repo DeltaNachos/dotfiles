@@ -48,13 +48,13 @@ local options = {
       n = { ["q"] = require("telescope.actions").close },
       n = {["<leader>pf"] = require("telescope.builtin").find_files},
       n = {["<C-p>"] = require("telescope.builtin").git_files},
+--      n = {["<leader>th"] = require("telescope.builtin").find_files(require("telescope.themes").get_dropdown({}))},
       n = {["<leader>ps"] = function()
-        require("telescope.builtin").grep_string({ search = vim.fn.input("Grep > ") });
+          require("telescope.builtin").grep_string({ search = vim.fn.input("Grep > ") });
       end
     },
   },
-
   extensions_list = { "themes", "terms" },
-}
+}}
 
 return options
